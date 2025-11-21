@@ -1,0 +1,71 @@
+name: Playwright CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  pw-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Generate MCP artifacts
+        run: npm run mcp:demo
+
+      - name: Run Playwright tests
+        env:
+          PW_TEST_HTML_REPORT_OPEN: never
+        run: npm test
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: artifacts/screenshots
+          if-no-files-found: warn
+
+      - name: Upload trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trace
+          path: artifacts/trace.zip
+          if-no-files-found: warn
+
+      - name: Upload MCP transcript
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-transcript
+          path: artifacts/mcp-transcript.json
+          if-no-files-found: warn
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "## Playwright summary";
+            echo "- Status: ${{ job.status }}";
+            echo "- Tests command: \`npm test\`";
+            echo "- Artifacts: [screenshots], [trace], [mcp-transcript]";
+          } >> "$GITHUB_STEP_SUMMARY"
+
+

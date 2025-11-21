@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "playwright-cursor-custom-config": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest",
+        "--config",
+        ".mcp/config.json"
+      ],
+      "env": {}
+    }
+  }
+}
+

@@ -1,0 +1,13 @@
+{
+  "outputDir": "artifacts-mcp-custom-config",
+  "capabilities": [
+    "core"
+  ],
+  "browser": {
+    "browserName": "chromium",
+    "isolated": true
+  },
+  "saveTrace": true,
+  "saveSession": true
+}
+

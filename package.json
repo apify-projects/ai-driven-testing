@@ -1,0 +1,39 @@
+{
+  "name": "ai-driven-testing",
+  "version": "1.0.0",
+  "description": "Hands-on AI-driven end-to-end testing workshop with Playwright, MCP tooling, Playwright Test Agents, and CI/CD examples.",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "playwright:install": "playwright install --with-deps",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "mcp:demo": "tsx scripts/mcp-login-demo.ts",
+    "slides:dev": "marp --preview slides/ai-testing.md",
+    "slides:build": "marp slides/ai-testing.md --html --output slides/dist/ai-testing.html",
+    "docker:build": "docker build -f Dockerfile -t ai-testing .",
+    "docker:test": "docker run --rm --ipc=host --shm-size=1g ai-testing"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "ai",
+    "workshop",
+    "mcp"
+  ],
+  "author": "Martin Krištof",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.2.3",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}
