@@ -1,44 +1,18 @@
-# Day 1 – Prompting Cheatsheet
+# Day 1
 
-**For Facilitators:** Use these prompts to demonstrate how an AI assistant can accelerate authoring Playwright tests. Show them to attendees and adapt them live. Discuss why you accept or reject AI suggestions.
+## Test Examples in this Directory created in future
 
-This file is a reference guide for the facilitator during the prompting demo session.
+**AI-generated baseline tests:**
+- `login.spec.ts` - AI-generated baseline login test with direct locators (happy path, locked user, validation) - serves as ground truth reference
+- `login-pom.spec.ts` - Same login scenarios using Page Object Model pattern
 
-## 1. Context priming
+**Extended flow tests:**
+- `login-add-to-cart.spec.ts` - Complete flow (login + add to cart) using direct locators
+- `login-add-to-cart-pom.spec.ts` - Same flow using Page Object Model (expected pattern)
 
-```
-You are a senior Playwright engineer. I need to automate the login flow of https://www.saucedemo.com/.
-Respond with TypeScript that uses @playwright/test and covers:
-- standard_user happy path
-- locked_out_user negative path
-- validation for missing credentials
-Return code only.
-```
+## 1. MCP Server Demo (Cursor/VS Code)
 
-Review criteria:
-- Does it rely on brittle selectors instead of `getByRole`/`getByPlaceholder`?
-- Are assertions meaningful (headings, data-test ids) rather than URL checks?
-
-## 2. Debug-style follow-up
-
-```
-The locked_out_user test keeps timing out because the assistant clicks the button twice.
-Rewrite the test to wait for the error container instead.
-Explain what changed in 2 sentences.
-```
-
-Encourage attendees to ask “why” and “what changed” so outputs are auditable.
-
-## 3. Red-team prompt
-
-```
-You previously generated a login test. Pretend the product owner just changed the CTA label from "Login" to "Sign in".
-Please propose the diff I should apply and call out any extra verifications I should add.
-```
-
-This illustrates how AI can suggest maintenance diffs instead of fresh files.
-
-## 4. MCP Server Demo (Cursor/VS Code)
+**Use this prompt to demonstrate that MCP can control the browser directly. This shows the foundation before we use MCP for test generation.**
 
 Use this prompt with the Playwright MCP server in Cursor or VS Code to demonstrate live browser automation.
 
@@ -79,9 +53,182 @@ After demonstrating the basic setup, introduce custom configuration:
 - Show the browser tools being called (browser_navigate, browser_type, browser_click, browser_take_screenshot)
 - Inspect the generated artifacts in the output directory
 - Compare default vs. custom configuration behavior
-- Compare this approach to the custom script (`mcp-login-demo.ts`)
 
-## 5. AI-Assisted Test Generation (MCP Flow)
+---
+
+**Part C: Custom Script (MCP-style Tool Calls)**
+
+After demonstrating the official MCP server, show the custom script that demonstrates MCP-style tool calls:
+
+**Setup:**
+1. Open `scripts/mcp-login-demo.ts` and walk through the code
+2. Explain how MCP tool calls map to Playwright APIs:
+   - `browser_navigate` → `page.goto()`
+   - `browser_fill_form` → `locator.fill()` (fills multiple fields at once)
+   - `browser_click` → `locator.click()`
+   - `browser_wait_for` → `page.waitForSelector()` / `page.waitForURL()`
+   - `browser_verify_text_visible` → `expect(page.getByText()).toBeVisible()`
+   - `browser_verify_element_visible` → `expect(page.getByRole()).toBeVisible()`
+   - `browser_generate_locator` → generates Playwright locator (e.g., `locator('[data-test="..."]')`)
+   - `browser_take_screenshot` → `page.screenshot()`
+   - `browser_start_tracing` / `browser_stop_tracing` → `context.tracing.start()` / `context.tracing.stop()`
+
+---
+
+**Run the script:**
+```bash
+npm run mcp:demo
+```
+
+**What to expect:**
+- Script executes the same login flow as the MCP server demo
+- Generates `artifacts/mcp-transcript.json` with all tool calls
+- Demonstrates test assertions (verify text/element visible, generate locator)
+- Demonstrates tracing tools (start/stop tracing)
+- Saves screenshot, trace, and video automatically via MCP server
+- Video enabled via `--save-video=800x600` flag
+- Testing and tracing capabilities enabled via `--caps=testing,tracing`
+- All artifacts are saved to `artifacts/` directory
+
+**Review with attendees:**
+- Open `artifacts/mcp-transcript.json` and show the tool call structure
+- Compare MCP tool calls in transcript with Playwright API calls in the script
+- Inspect screenshot, trace, and video artifacts
+- Explain that this demonstrates how MCP tool calls translate to executable Playwright code
+
+**Key principle:** This demonstrates that MCP can directly control the browser. The custom script shows how MCP tool calls map to Playwright APIs, and how we can capture artifacts (screenshot, trace, video) automatically. Now we'll use this capability to generate test code.
+
+---
+
+## 2. Context priming (Generate Baseline Test - Initial Attempt)
+
+**Use this prompt to generate the baseline login test. This is the initial attempt - it may not be optimal and will need refinement.**
+
+```
+You are a senior Playwright engineer. I need to automate the login flow of https://www.saucedemo.com/.
+Respond with TypeScript that uses @playwright/test and covers:
+- standard_user happy path
+- locked_out_user negative path
+- validation for missing credentials
+Return code only.
+```
+
+**After generation, review the output and identify issues:**
+- ❓ Does it use brittle CSS selectors instead of accessible selectors?
+- ❓ Are assertions meaningful or just URL checks?
+- ❓ Does it handle locked_out_user correctly (waits for error, not navigation)?
+- ❓ Is the test structure proper (`test.describe()`, `test.beforeEach()`)?
+
+**Note:** This first attempt will likely have issues. Use the next prompt to refine it.
+
+## 3. Context priming with Requirements (Generate Optimized Baseline Test)
+
+**Use this prompt to generate the baseline login test with explicit requirements. This should produce better quality code than the initial attempt.**
+
+```
+You are a senior Playwright engineer. I need to automate the login flow of https://www.saucedemo.com/.
+Respond with TypeScript that uses @playwright/test and covers:
+- standard_user happy path (should navigate to inventory page after login)
+- locked_out_user negative path (should wait for error message, NOT navigation - this user is blocked from logging in)
+- validation for missing credentials (should show validation error)
+
+Requirements:
+- Use accessible selectors: `getByRole()`, `getByPlaceholder()`, `getByTestId()` - avoid brittle CSS selectors like `.login-button` or `#password`
+- Use proper test structure: `test.describe()` and `test.beforeEach()` for setup
+- Assertions should be meaningful: check actual content (headings, text, data-test ids) rather than just URL checks
+- For locked_out_user: wait for error message using `getByTestId('error')` and `toContainText('Sorry, this user has been locked out.')`, do NOT wait for navigation
+- For standard_user: verify successful login by checking inventory page elements (e.g., "Products" heading), not just URL
+
+Return code only.
+```
+
+**After generation, save the output as `tests/examples/day1/login.spec.ts`**
+
+**Review criteria (for facilitator - verify AI followed the requirements):**
+- ✅ Uses accessible selectors (`getByRole`, `getByPlaceholder`) instead of brittle selectors
+- ✅ Assertions are meaningful (headings, data-test ids) rather than just URL checks
+- ✅ Uses proper test structure (`test.describe()`, `test.beforeEach()`)
+- ✅ Handles locked_out_user correctly (waits for error message, not navigation)
+
+**Key principle:** Compare this output with section 2 - adding explicit requirements in the prompt produces better quality code. This demonstrates the importance of being specific in prompts.
+
+## 4. Red-team prompt
+
+```
+You previously generated a login test. Pretend the product owner just changed the CTA label from "Login" to "Sign in".
+Please propose the diff I should apply and call out any extra verifications I should add.
+```
+
+**Reference:** Compare with `login.spec.ts` - if the button label changes, only the `getByRole` selector needs updating. This shows the value of accessible selectors.
+
+This illustrates how AI can suggest maintenance diffs instead of fresh files.
+
+## 5. Debug-style follow-up
+
+**Use this when the generated test has specific issues that need fixing.**
+
+**Example 1: Fixing brittle selectors**
+```
+The generated login test uses CSS selectors like `.login-button` which might break if the UI changes.
+Rewrite it to use accessible selectors like `getByRole` or `getByPlaceholder` instead.
+Explain what changed in 2 sentences.
+```
+
+**Example 2: Fixing locked_out_user test (if AI generated wrong assertion)**
+```
+The locked_out_user test keeps timing out. The AI-generated test waits for navigation to the inventory page, but locked_out_user cannot log in and stays on the login page. 
+Rewrite the test to wait for the error message container instead of waiting for navigation.
+Explain what changed in 2 sentences.
+```
+
+**Reference:** See how `login.spec.ts` handles the locked_out_user test - it uses `getByTestId('error')` and `toContainText('Sorry, this user has been locked out.')` instead of waiting for navigation.
+
+**Key principle:** Encourage attendees to ask "why" and "what changed" so outputs are auditable. Debug-style prompts help fix specific issues in generated code.
+
+
+## 6. Page Object Model (POM) - Generate Test with POM
+
+**Use this prompt to generate a login test using the existing Page Object Model classes.**
+
+```
+You are a senior Playwright engineer. I need to rewrite the login test for https://www.saucedemo.com/ using the existing Page Object Model classes.
+
+Available POM classes in `tests/pages/`:
+- LoginPage - for login interactions (methods: `goto()`, `login(username, password)`, `clickLogin()`, `expectErrorMessage(text)`)
+- InventoryPage - for inventory page interactions (methods: `expectPageLoaded()`)
+- CartPage - for cart page interactions
+- CheckoutPage - for checkout flow interactions
+
+Import them like this: `import { LoginPage, InventoryPage } from '../../pages';`
+
+Create a test file that covers:
+- standard_user happy path (should navigate to inventory page after login)
+- locked_out_user negative path (should wait for error message, NOT navigation - this user is blocked from logging in)
+- validation for missing credentials (should show validation error)
+
+Requirements:
+- Use the existing Page Object Model classes from `tests/pages/` - do NOT use direct locators
+- Use proper test structure: `test.describe()` and individual `test()` blocks
+- For locked_out_user: use `loginPage.expectErrorMessage('Sorry, this user has been locked out.')`
+- For standard_user: use `inventoryPage.expectPageLoaded()` to verify successful login
+- For validation: use `loginPage.clickLogin()` then `loginPage.expectErrorMessage('Username is required')`
+
+Return code only.
+```
+
+**After generation, save the output as `tests/examples/day1/login-pom.spec.ts`**
+
+**Review criteria (for facilitator - verify AI followed the requirements):**
+- ✅ Uses existing Page Object Model classes from `tests/pages/` (REQUIRED - no direct locators)
+- ✅ Uses proper test structure (`test.describe()`, individual `test()` blocks)
+- ✅ Handles locked_out_user correctly (uses `expectErrorMessage()`, not navigation)
+- ✅ Uses POM methods instead of direct Playwright API calls
+
+**Reference:** Compare with `login-pom.spec.ts` in this directory - it shows the expected POM pattern.
+
+**Key principle:** This demonstrates how to guide AI to use existing abstractions (POM) instead of generating code with direct locators. This is important for maintainability.
+
+## 7. AI-Assisted Test Generation (MCP Flow)
 
 Use this prompt in Cursor (with MCP enabled) or VS Code Copilot Chat (Agent Mode) to generate a complete end-to-end test:
 
@@ -117,16 +264,15 @@ Use the Page Object Model methods (e.g., `loginPage.login()`, `inventoryPage.add
 - Proper use of Playwright best practices (waits, assertions)
 - Ready to run with `npm test`
 
-**Reference implementations:**
+**Reference implementations in this directory:**
 - `login-add-to-cart-pom.spec.ts` - Page Object Model approach (this is the expected pattern)
 - `login-add-to-cart.spec.ts` - Direct locators approach (for comparison only)
+- `login-pom.spec.ts` - Login test using POM (shows POM pattern for login flow)
+- `login.spec.ts` - AI-generated baseline login test (ground truth reference, generated using Context priming prompt)
 
 **Review criteria:**
-- Does it use the existing Page Object Model classes from `tests/pages/`? (REQUIRED)
-- Are waits properly implemented (e.g., `waitForURL`, `waitForLoadState`)?
-- Are assertions meaningful (checking actual content, not just presence)?
-- Does it handle the cart badge correctly?
+- ✅ Uses existing Page Object Model classes from `tests/pages/` (REQUIRED)
+- ✅ Waits are properly implemented (e.g., `waitForURL`, `waitForLoadState`)
+- ✅ Assertions are meaningful (checking actual content, not just presence)
+- ✅ Handles the cart badge correctly
 
-## 6. Transcript recap
-
-After running `npm run mcp:demo`, open `artifacts/mcp-transcript.json` and link each entry to the equivalent tool call (open, getByRole, fill, click, assert, saveScreenshot). This closes the loop between prompting and executable output.

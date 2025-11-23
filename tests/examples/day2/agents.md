@@ -32,12 +32,12 @@ Use this sheet for **Part 2 (chat-driven Playwright agents)** on Day 2.
 
 ## Demo script
 
-- Start with planner; inspect the Markdown plan (save under `artifacts/plans/` if useful).
+- Start with planner; inspect the Markdown plan (save under `/spec` if useful).
 - Run generator; open the resulting spec, run it locally, collect artifacts (similar to MCP artifacts from Day 1).
 - Break a test (change a locator), then run healer to propose a patch. Show how to diff/approve manually.
 
 ## Implementation pointers
 
-- Review agent-generated specs in `tests/examples/day2/` and validate them (see `tests/examples/day2/enhancing.md` for criteria).
-- Reuse selectors from handcrafted tests to minimize flakiness.
+- Review agent-generated specs in `tests/examples/day2/` and validate them (see `tests/examples/day2/prompts-enhancing.md` for criteria).
+- Reuse page object models and selectors from handcrafted tests to minimize flakiness.
 - When running agents in CI, use read-only credentials and disable destructive tools.

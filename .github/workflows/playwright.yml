@@ -2,14 +2,12 @@ name: Playwright CI
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
 
 jobs:
   pw-tests:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,13 +16,35 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: node-modules-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: npm ci
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-
+
+      - name: Install Playwright system dependencies
+        run: npx playwright install-deps
+
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install
 
       - name: Generate MCP artifacts
         run: npm run mcp:demo
@@ -34,29 +54,35 @@ jobs:
           PW_TEST_HTML_REPORT_OPEN: never
         run: npm test
 
-      - name: Upload screenshots
-        if: always()
+      - name: Upload test results
+        if: ${{ !cancelled() }}
+        id: upload-test-results
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
-          path: artifacts/screenshots
-          if-no-files-found: warn
+          name: test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
 
-      - name: Upload trace
-        if: always()
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        id: upload-playwright-report
         uses: actions/upload-artifact@v4
         with:
-          name: trace
-          path: artifacts/trace.zip
+          name: playwright-report
+          path: playwright-report/
           if-no-files-found: warn
+          retention-days: 30
 
       - name: Upload MCP transcript
-        if: always()
+        if: ${{ !cancelled() }}
+        id: upload-mcp-transcript
         uses: actions/upload-artifact@v4
         with:
           name: mcp-transcript
           path: artifacts/mcp-transcript.json
           if-no-files-found: warn
+          retention-days: 30
 
       - name: Job summary
         if: always()
@@ -65,7 +91,23 @@ jobs:
             echo "## Playwright summary";
             echo "- Status: ${{ job.status }}";
             echo "- Tests command: \`npm test\`";
-            echo "- Artifacts: [screenshots], [trace], [mcp-transcript]";
+            echo "";
+            echo "### Artifacts";
+            ARTIFACTS_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo "Artifacts are available in the [workflow run]($ARTIFACTS_URL#artifacts):";
+            if [ -n "${{ steps.upload-test-results.outputs.artifact-url }}" ]; then
+              echo "- **[test-results](${{ steps.upload-test-results.outputs.artifact-url }})** - Screenshots, traces, videos from test runs";
+            else
+              echo "- **test-results** - Screenshots, traces, videos from test runs";
+            fi
+            if [ -n "${{ steps.upload-playwright-report.outputs.artifact-url }}" ]; then
+              echo "- **[playwright-report](${{ steps.upload-playwright-report.outputs.artifact-url }})** - HTML test report";
+            else
+              echo "- **playwright-report** - HTML test report";
+            fi
+            if [ -n "${{ steps.upload-mcp-transcript.outputs.artifact-url }}" ]; then
+              echo "- **[mcp-transcript](${{ steps.upload-mcp-transcript.outputs.artifact-url }})** - MCP tool call transcript";
+            else
+              echo "- **mcp-transcript** - MCP tool call transcript";
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
-
-

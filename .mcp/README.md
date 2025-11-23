@@ -19,7 +19,7 @@ Here's an example `config.json` that matches our setup:
 
 ```json
 {
-  "outputDir": "artifacts-mcp-custom-config",
+  "outputDir": "artifacts",
   "capabilities": [
     "core"
   ],
@@ -48,12 +48,13 @@ Here's an example `config.json` that matches our setup:
 **Automatic Artifact Collection:**
 
 The MCP server automatically captures artifacts based on the configuration:
-- **Traces**: When `saveTrace: true` is set, the server automatically saves trace files for all browser interactions
+- **Traces**: When `saveTrace: true` is set, the server automatically saves trace files for all browser interactions. Alternatively, use `browser_start_tracing` and `browser_stop_tracing` tools (requires `--caps=tracing`).
 - **Screenshots**: Screenshots are captured automatically when configured
 - **Sessions**: When `saveSession: true` is set, browser session state is saved
+- **Video**: Video recording is available via `--save-video` flag (e.g., `--save-video=800x600`)
+- **Test Assertions**: Available via `--caps=testing` (e.g., `browser_verify_text_visible`, `browser_verify_element_visible`, `browser_generate_locator`)
 - All artifacts are saved to the `outputDir` specified in the config
 
-**Note:** Video recording is **not** supported by the official MCP server. If you need video recording, use the custom `scripts/mcp-login-demo.ts` script instead (see `README.md` for details).
 
 For more details on configuration options, see the [official Playwright MCP documentation](https://github.com/microsoft/playwright-mcp?tab=readme-ov-file#configuration-file).
 

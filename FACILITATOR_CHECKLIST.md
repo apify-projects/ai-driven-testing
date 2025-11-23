@@ -20,33 +20,53 @@ Use this document as your runbook when delivering the 1.5‑day workshop. Adapt 
   - [ ] **For VS Code users**: Install MCP extension if needed, follow [official documentation](https://github.com/microsoft/playwright-mcp?tab=readme-ov-file#configuration-file) to add Playwright MCP server. Show how to configure it in VS Code settings.
   - [ ] Verify MCP server is running (check IDE logs or MCP status panel).
   - [ ] Explain that this uses default settings (no custom config yet).
+  - [ ] Reference `.mcp/README.md` for detailed configuration guide.
 - [ ] Domain walkthrough: Browse https://www.saucedemo.com/ with test accounts from README.
-- [ ] Prompting demo:
+- [ ] **MCP demo (Section 1)**:
   - [ ] Display `tests/examples/day1/prompts.md`.
-  - [ ] Paste the "Context priming" prompt into your AI assistant (Cursor/Copilot/ChatGPT) and review output.
-  - [ ] Apply "Debug" and "Red-team" prompts; highlight improvements/risks.
-
-- [ ] Manual baseline:
-  - [ ] Open `tests/examples/day1/login.spec.ts` and live-code key snippets.
-  - [ ] Run `npx playwright test tests/examples/day1/login.spec.ts --project=chromium`.
-- [ ] **Page Object Model introduction**:
-  - [ ] Present `tests/examples/day1/page-object-model.md` - explain POM benefits and principles.
-  - [ ] Compare `login.spec.ts` (direct locators) with `login-pom.spec.ts` (POM pattern).
-  - [ ] Show page object structure in `tests/pages/` directory.
-  - [ ] Discuss when to use POM vs. direct locators.
-- [ ] MCP demo:
-  - [ ] **Official MCP Server**: Use prompt from `prompts.md` section 4 to log in as standard_user. Show browser tools being called and artifacts being saved (using default settings).
-  - [ ] **Custom Config Setup**: Now introduce custom configuration:
+  - [ ] **Part A - Basic MCP Server**: Use prompt from `prompts.md` section 1, Part A to log in as standard_user. Show browser tools being called and artifacts being saved (using default settings).
+  - [ ] **Part B - Custom Configuration**: 
     - [ ] Show `.cursor/mcp.json` and `.vscode/mcp.json` files with custom config pointing to `.mcp/config.json`.
+    - [ ] Show `.mcp/config.json` configuration file and explain its options.
+    - [ ] Reference `.mcp/README.md` for detailed configuration documentation.
     - [ ] Explain benefits: custom output directory, specific capabilities, browser settings.
     - [ ] Restart IDE to load custom config.
-  - [ ] **Custom Config Demo**: Run the same prompt again, show artifacts saved to custom `outputDir` from `.mcp/config.json`.
-  - [ ] **Custom Script**: Walk through `scripts/mcp-login-demo.ts`, execute `npm run mcp:demo`, then inspect `artifacts/mcp-transcript.json`, screenshot, trace, and video.
+    - [ ] Run the same prompt again, show artifacts saved to custom `outputDir` from `.mcp/config.json`.
+  - [ ] **Part C - Custom Script**: 
+    - [ ] Walk through `scripts/mcp-login-demo.ts` code.
+    - [ ] Explain MCP tool call mapping to Playwright APIs (navigation, form filling, assertions, tracing).
+    - [ ] Show test assertions (`browser_verify_text_visible`, `browser_verify_element_visible`, `browser_generate_locator`).
+    - [ ] Show tracing tools (`browser_start_tracing`, `browser_stop_tracing`).
+    - [ ] Execute `npm run mcp:demo`.
+    - [ ] Inspect `artifacts/mcp-transcript.json`, screenshot, trace, and video (all saved to `artifacts/` directory).
+    - [ ] Compare MCP tool calls in transcript with Playwright API calls in the script.
+    - [ ] Note: Testing and tracing capabilities enabled via `--caps=testing,tracing`, video via `--save-video=800x600`.
+- [ ] Prompting demo:
+  - [ ] **Prompt 1 (Section 2)**: Paste the "Context priming" prompt (without requirements) into your AI assistant to generate the baseline test.
+  - [ ] Review the generated output together - identify issues (brittle selectors, wrong assertions, etc.).
+  - [ ] **Prompt 2 (Section 3)**: Paste the "Context priming with Requirements" prompt to generate optimized version.
+  - [ ] Compare outputs - highlight how explicit requirements improve code quality.
+  - [ ] Save optimized test as `tests/examples/day1/login.spec.ts`.
+  - [ ] Run `npx playwright test tests/examples/day1/login.spec.ts --project=chromium`.
+  - [ ] **Prompt 3 (Section 4)**: Demonstrate "Red-team" prompt (diff for label change).
+  - [ ] **Prompt 4 (Section 5)**: Show "Debug-style follow-up" examples (if needed for specific issues).
+- [ ] **Page Object Model introduction**:
+  - [ ] Present `tests/examples/day1/page-object-model.md` - explain POM benefits and principles.
+  - [ ] Show page object structure in `tests/pages/` directory.
+  - [ ] **Prompt 5 (Section 6)**: Use POM prompt to generate `login-pom.spec.ts` using existing POM classes.
+  - [ ] Compare `login.spec.ts` (direct locators) with `login-pom.spec.ts` (POM pattern).
+  - [ ] Run `npx playwright test tests/examples/day1/login-pom.spec.ts --project=chromium`.
+  - [ ] Discuss when to use POM vs. direct locators.
 
 - [ ] Hands-on block: Assign `tests/exercises/day1/exercises.md`, circulate for questions.
+- [ ] CI/CD walkthrough:
+  - [ ] Open `.github/workflows/playwright.yml`, step through each job action.
+  - [ ] Emphasize artifact uploads + GitHub Job Summary.
+- [ ] Docker & reproducibility: Remind attendees of `npm run docker:test` and when to use it.
+- [ ] Reporting focus: Show how job summary links to screenshots/trace/MCP transcript (artifacts created in Day 1 or by agents).
 - [ ] Wrap-up and Q&A: Summarize Day 1, answer questions, set expectations for Day 2.
 
-## Day 2 – AI Extensions & CI/CD
+## Day 2 – AI Extensions
 
 - [ ] Recap: Discuss wins/challenges from day 1, set expectations for AI-generated tests.
 - [ ] **VS Code Setup Verification**: Verify VS Code Insiders setup for Playwright Agents:
@@ -55,21 +75,18 @@ Use this document as your runbook when delivering the 1.5‑day workshop. Adapt 
   - [ ] Run `npx playwright init-agents --loop=vscode` if needed to update/verify agent definitions.
   - [ ] Open repository in VS Code Insiders, verify Playwright Agents panel is visible.
 - [ ] Part 1 – AI-powered edge cases:
-  - [ ] Open `tests/examples/day2/enhancing.md` + `tests/examples/day1/login-edge-cases.spec.ts`.
-  - [ ] Harden selectors/assertions, discuss promotion criteria.
-  - [ ] Map MCP transcript steps (from Day 1 artifacts) to code.
+  - [ ] Display `tests/examples/day2/prompts-enhancing.md`.
+  - [ ] **Prompt (Section 1)**: Use prompt to generate edge case tests with POM.
+  - [ ] Review generated output - verify it uses POM classes and handles edge cases correctly.
+  - [ ] Save generated test as `tests/examples/day2/login-edge-cases.spec.ts`.
+  - [ ] Run `npx playwright test tests/examples/day2/login-edge-cases.spec.ts --project=chromium`.
+  - [ ] Compare with reference implementation and discuss promotion criteria.
 
 - [ ] Part 2 – Playwright agents (chat-driven):
   - [ ] Present `tests/examples/day2/agents.md`.
   - [ ] Live demo planner → generator → healer in VS Code Insiders.
   - [ ] Debrief on accept/reject criteria, capture diffs.
-- [ ] CI/CD walkthrough:
-  - [ ] Open `.github/workflows/playwright.yml`, step through each job action.
-  - [ ] Emphasize artifact uploads + GitHub Job Summary.
-
-- [ ] Docker & reproducibility: Remind attendees of `npm run docker:test` and when to use it.
-- [ ] Reporting focus: Show how job summary links to screenshots/trace/MCP transcript (artifacts created in Day 1 or by agents).
-- [ ] Hands-on block: Assign `tests/exercises/day2/exercises.md` (edge-case promo, agent guardrails, CI enhancements).
+- [ ] Hands-on block: Assign `tests/exercises/day2/exercises.md` (additional edge cases, Playwright agents on different application).
 - [ ] Wrap-up and Q&A: Final summary, collect feedback, share resources.
 
 ## After the workshop

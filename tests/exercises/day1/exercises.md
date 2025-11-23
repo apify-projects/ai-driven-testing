@@ -1,17 +1,17 @@
 # Exercises – Day 1
 
-1. **Prompt tune-up**  
-   Iterate on the baseline prompt so the AI returns `getByRole` selectors only. Document the final prompt and the improvement you observed.
+1. **Negative-path hardening**  
+   Create a test that verifies wrong password is rejected with an error message. Keep it under 10 lines. Save the test as `tests/exercises/day1/wrong-password.spec.ts`.
 
-2. **Negative-path hardening**  
-   Extend `tests/examples/day1/login.spec.ts` with an additional negative case (e.g. wrong password). Keep it under 10 lines.
+2. **MCP tool-based test**  
+   Use MCP tools (via Cursor/VS Code MCP chat) to write a test that logs in and adds a product to the cart. The AI should use MCP browser tools (`browser_navigate`, `browser_fill_form`, `browser_click`, etc.) to interact with the page. Save the generated test as `tests/exercises/day1/mcp-cart.ts`.
 
-3. **Transcript mapping**  
-   Run `npm run mcp:demo`, open `artifacts/mcp-transcript.json`, and match every entry to a Playwright API call. Add comments to the JSON if it helps you remember the mapping.
+3. **Page Object Model practice**  
+   Create a new test case that is not yet covered in the examples. Write a test that verifies a user can remove a product from the cart using the Page Object Model pattern. The test should:
+   - Log in as `standard_user`
+   - Add a product to the cart
+   - Navigate to the cart page
+   - Remove the product from the cart
+   - Verify the cart is empty or the product is no longer visible
 
-4. **Observation logging**  
-   Modify `scripts/mcp-login-demo.ts` to append the browser console logs to the transcript. Compare the diff with a teammate.
-
-5. **Page Object Model practice**  
-   Refactor one of the login tests to use the Page Object Model pattern. Use the existing page objects from `tests/pages/` or create new ones if needed. Compare the readability and maintainability with the original test.
-
+   Use existing Page Object Model classes from `tests/pages/` (LoginPage, InventoryPage, CartPage). Save the test as `tests/exercises/day1/remove-from-cart-pom.spec.ts`.

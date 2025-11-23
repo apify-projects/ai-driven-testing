@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
  * This test demonstrates a complete flow from login to adding a product to the cart.
  * It can be used as a reference when generating similar tests with AI assistance.
  *
- * See prompts.md section 5 for the prompt that can generate this test.
+ * See prompts.md section 7 for the prompt that can generate this test.
  */
 test.describe('Login and Add to Cart', () => {
   test('should log in and add first product to cart', async ({ page }) => {
