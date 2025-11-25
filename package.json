@@ -11,6 +11,7 @@
     "test:ui": "playwright test --ui",
     "test:report": "playwright show-report",
     "mcp:demo": "tsx scripts/mcp-login-demo.ts",
+    "mcp:cart": "tsx tests/exercises/day1/mcp-cart.ts",
     "slides:dev": "marp --preview slides/ai-testing.md",
     "slides:build": "marp slides/ai-testing.md --html --output slides/dist/ai-testing.html",
     "docker:build": "docker build -f Dockerfile -t ai-testing .",

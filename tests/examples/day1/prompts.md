@@ -139,7 +139,7 @@ Requirements:
 - For locked_out_user: wait for error message using `getByTestId('error')` and `toContainText('Sorry, this user has been locked out.')`, do NOT wait for navigation
 - For standard_user: verify successful login by checking inventory page elements (e.g., "Products" heading), not just URL
 
-Return code only.
+Generate test
 ```
 
 **After generation, save the output as `tests/examples/day1/login.spec.ts`**
@@ -213,7 +213,7 @@ Requirements:
 - For standard_user: use `inventoryPage.expectPageLoaded()` to verify successful login
 - For validation: use `loginPage.clickLogin()` then `loginPage.expectErrorMessage('Username is required')`
 
-Return code only.
+Implement as login-pom.spec test
 ```
 
 **After generation, save the output as `tests/examples/day1/login-pom.spec.ts`**

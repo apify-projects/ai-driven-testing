@@ -100,5 +100,15 @@ export class InventoryPage extends BasePage {
     const addToCartButton = product.locator('button').filter({ hasText: 'Add to cart' });
     await addToCartButton.click();
   }
+
+  /**
+   * Get the name of a product by index
+   */
+  async getProductName(index: number): Promise<string> {
+    const product = this.productItems.nth(index);
+    const productName = product.locator('.inventory_item_name');
+    const name = await productName.textContent();
+    return name ? name.trim() : '';
+  }
 }
 

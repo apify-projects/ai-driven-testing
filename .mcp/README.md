@@ -136,3 +136,6 @@ The MCP server is automatically started by your MCP client (VS Code, Cursor, etc
 - [Playwright MCP Server Documentation](https://github.com/microsoft/playwright-mcp)
 - [Model Context Protocol (MCP) Documentation](https://modelcontextprotocol.io/)
 
+## FFMPEG
+
+npx playwright install ffmpeg
