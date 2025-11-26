@@ -6,7 +6,9 @@ test.describe('Login Page - POM', () => {
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
     await loginPage.goto();
-    await loginPage.login('standard_user', 'secret_sauce');
+    const username = process.env.USER_NAME ?? '';
+    const password = process.env.PASSWORD ?? '';
+    await loginPage.login(username, password);
     await inventoryPage.expectPageLoaded();
   });
 

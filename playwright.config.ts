@@ -1,6 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
 
 const SAUCE_DEMO_BASE_URL = 'https://www.saucedemo.com/';
+// Read from ".env" file.
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
   fullyParallel: true,
