@@ -39,7 +39,7 @@ Requirements:
 - Use a loop for the two user scenarios (problem_user, performance_glitch_user) to avoid code duplication
 - The test should be resilient to timing issues (performance_glitch_user may be slow)
 
-Return code only.
+After generation, save the output as `tests/examples/day2/login-edge-cases.spec.ts`
 ```
 
 **After generation, save the output as `tests/examples/day2/login-edge-cases.spec.ts`**
