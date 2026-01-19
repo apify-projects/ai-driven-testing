@@ -2,7 +2,7 @@
 
 This repository contains the starter template for a 1.5-day hands-on training focused on AI-assisted end-to-end testing with Playwright, MCP tooling, and CI/CD automation. All workshop assets (prompts, slides, exercises, and Page Object Model classes) are included to help you build tests during the workshop.
 
-**Workshop Structure:** Day 1 covers MCP setup, prompting principles, Page Object Model, baseline test generation, and CI/CD integration. Day 2 focuses on AI-generated edge cases and Playwright agents.
+**Workshop Structure:** Day 1 starts with a Playwright introduction (for beginners), then covers MCP setup, prompting principles, Page Object Model, environment variables with dotenv, baseline test generation, and CI/CD integration. Day 2 focuses on AI-generated edge cases and Playwright agents.
 
 > Looking for the step-by-step branch to recreate the project live? Create a new branch (e.g. `walkthrough/day1`) from `main` and progressively cherry-pick commits or remove folders as you teach. Instructions below explain each component so it is easy to rebuild during the workshop.
 
@@ -93,9 +93,11 @@ After you're comfortable with the basic setup, you can use the pre-configured cu
 
 ## Day 1 content
 
+- **Playwright Introduction**: Slides cover Playwright basics, key concepts, and selector best practices (accessible selectors vs. brittle CSS selectors). This section is designed for attendees new to Playwright.
 - `tests/pages/`: Page Object Model classes (`LoginPage`, `InventoryPage`, `CartPage`, `CheckoutPage`) that encapsulate page-specific logic. Use these classes when generating tests with AI.
 - `tests/examples/day1/prompts.md`: prompt engineering walkthrough for generating the login flow with an AI assistant; includes review tips and red-team prompts. Use these prompts to generate your tests during the workshop.
 - `tests/examples/day1/page-object-model.md`: documentation explaining the Page Object Model pattern and how to use it.
+- **Environment Variables with dotenv**: Section 8 in `prompts.md` covers using `dotenv` for managing credentials and sensitive data. The `playwright.config.ts` is pre-configured to load `.env` file. Create a `.env` file with `USER_NAME` and `PASSWORD` variables for secure credential management.
 - `scripts/mcp-login-demo.ts`: example MCP-style script that demonstrates how MCP tool calls map to Playwright APIs. Study this to understand the MCP workflow.
 - `artifacts/`: output directory for MCP transcripts (`mcp-transcript.json`), screenshots, and traces. The folder is ignored by Git so your local artifacts do not pollute version control.
 
@@ -194,12 +196,14 @@ The GitHub Actions workflow under `.github/workflows/playwright.yml` installs de
 
 This repository is set up as a starter template. During the workshop, you will:
 
-1. Set up MCP server and configure it.
-2. Use prompts from `tests/examples/day1/prompts.md` to generate login tests with AI.
-3. Learn Page Object Model pattern and generate POM-based tests.
-4. Generate edge case tests using prompts from `tests/examples/day2/prompts-enhancing.md`.
-5. Use Playwright agents (Planner, Generator, Healer) to create tests for different applications.
-6. Set up CI/CD workflow to run tests automatically.
+1. Learn Playwright basics (if new to Playwright) - key concepts, selectors, and best practices.
+2. Set up MCP server and configure it.
+3. Use prompts from `tests/examples/day1/prompts.md` to generate login tests with AI.
+4. Learn Page Object Model pattern and generate POM-based tests.
+5. Configure environment variables with dotenv for secure credential management.
+6. Generate edge case tests using prompts from `tests/examples/day2/prompts-enhancing.md`.
+7. Use Playwright agents (Planner, Generator, Healer) to create tests for different applications.
+8. Set up CI/CD workflow to run tests automatically.
 
 ---
 

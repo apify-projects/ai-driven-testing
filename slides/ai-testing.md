@@ -71,6 +71,102 @@ Deliverables: generated specs, agent-generated tests.
 
 ---
 
+## What is Playwright?
+
+**Playwright** is an open-source end-to-end testing framework by Microsoft.
+
+**Key features:**
+- Cross-browser testing (Chromium, Firefox, WebKit)
+- Cross-platform (Windows, macOS, Linux)
+- Auto-waiting and retry mechanisms
+- Network interception and mocking
+- Screenshot and video recording
+- Trace viewer for debugging
+
+---
+
+**Why Playwright?**
+- Fast and reliable
+- Modern API with async/await
+- Great developer experience
+- Strong TypeScript support
+- Active community and ecosystem
+
+---
+<!-- Scoped style -->
+<style scoped>
+pre {
+  font-size: 1rem;
+  min-width: 50%;
+  height: 100%;
+}
+</style>
+
+## Playwright Basics
+
+**Test structure:**
+```typescript
+import { test, expect } from '@playwright/test';
+
+test('example test', async ({ page }) => {
+  await page.goto('https://example.com');
+  await expect(page).toHaveTitle(/Example/);
+});
+```
+
+---
+
+**Key concepts:**
+- `test()` - individual test case
+- `page` - browser page object (injected via fixture)
+- `expect()` - assertions library
+- `locator` - element selector (auto-waits)
+
+**Common actions:**
+- `page.goto(url)` - navigate to URL
+- `page.click(selector)` - click element
+- `page.fill(selector, text)` - fill input field
+- `page.getByRole()` - accessible selector
+- `page.getByText()` - text-based selector
+
+---
+
+<!-- Scoped style -->
+<style scoped>
+pre {
+  font-size: 1rem;
+  min-width: 50%;
+  height: 100%;
+}
+</style>
+
+## Playwright Selectors
+
+**Best practices for selectors:**
+
+**✅ Prefer accessible selectors:**
+```typescript
+page.getByRole('button', { name: 'Login' })
+page.getByPlaceholder('Username')
+page.getByTestId('submit-button')
+```
+
+**❌ Avoid brittle CSS selectors:**
+```typescript
+page.locator('.login-button')  // breaks if CSS changes
+page.locator('#password')      // breaks if ID changes
+```
+
+---
+
+**Why accessible selectors?**
+- More stable (less likely to break)
+- Better for accessibility testing
+- Closer to how users interact
+- Easier to maintain
+
+---
+
 ## MCP Server Setup
 
 **What is MCP?**
@@ -301,6 +397,57 @@ export class LoginPage extends BasePage {
 - Test using POM vs. direct locators comparison
 - See `tests/examples/day1/page-object-model.md` for detailed explanation
 - Use prompt from `prompts.md` Section 6 to generate POM test
+
+---
+
+## Environment Variables with dotenv
+
+**Why use environment variables?**
+- Keep credentials out of test code
+- Different values for different environments
+- Secure sensitive data (not in version control)
+- Easy to update without code changes
+
+---
+<!-- Scoped style -->
+<style scoped>
+pre {
+  font-size: 1rem;
+  min-width: 50%;
+  height: 100%;
+}
+</style>
+
+
+**Setup:**
+1. Install `dotenv` package: `npm install --save-dev dotenv`
+2. Configure in `playwright.config.ts`: import and load `.env` file
+3. Create `.env` file with credentials: `USER_NAME=standard_user`, `PASSWORD=secret_sauce`
+4. Add `.env` to `.gitignore`
+
+**Usage in tests:**
+```typescript
+const username = process.env.USER_NAME ?? '';
+const password = process.env.PASSWORD ?? '';
+await loginPage.login(username, password);
+```
+
+---
+
+## 📝 Live Coding: Environment Variables
+
+**Open files:**
+- `playwright.config.ts` - dotenv configuration
+- `.env` - environment variables file (create if needed)
+- `tests/examples/day1/login-pom.spec.ts` - test using env variables
+
+**What to demonstrate:**
+- Show dotenv configuration in `playwright.config.ts`
+- Create `.env` file with credentials - if not exists
+- Update test to use `process.env.USER_NAME` and `process.env.PASSWORD`
+- Show `.gitignore` entry for `.env`
+- Run test to verify it works with environment variables
+- See `prompts.md` Section 8 for detailed instructions
 
 ---
 

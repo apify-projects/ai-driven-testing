@@ -276,3 +276,59 @@ Use the Page Object Model methods (e.g., `loginPage.login()`, `inventoryPage.add
 - ✅ Assertions are meaningful (checking actual content, not just presence)
 - ✅ Handles the cart badge correctly
 
+## 8. Environment Variables with dotenv
+
+**Use this to demonstrate how to use environment variables in tests for sensitive data like credentials.**
+
+**Setup:**
+
+1. Install dotenv package (if not already installed):
+```bash
+npm install --save-dev dotenv
+```
+
+2. Configure dotenv in `playwright.config.ts`:
+```typescript
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Read from ".env" file
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+```
+
+3. Create `.env` file in the project root:
+```env
+USER_NAME=standard_user
+PASSWORD=secret_sauce
+```
+
+4. Add `.env` to `.gitignore` to prevent committing sensitive data:
+```
+.env
+```
+
+**Update test to use environment variables:**
+
+Modify the login test to read credentials from environment variables:
+
+```typescript
+test.describe('Login Page - POM', () => {
+  test('should login successfully with standard_user', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const inventoryPage = new InventoryPage(page);
+    await loginPage.goto();
+    const username = process.env.USER_NAME ?? '';
+    const password = process.env.PASSWORD ?? '';
+    await loginPage.login(username, password);
+    await inventoryPage.expectPageLoaded();
+  });
+});
+```
+
+**Benefits:**
+- ✅ Credentials are not hardcoded in test files
+- ✅ Different credentials can be used in different environments (dev, staging, prod)
+- ✅ Sensitive data is kept out of version control
+- ✅ Easy to update credentials without modifying test code
+
+**Key principle:** Use environment variables for any sensitive or environment-specific data (credentials, API keys, URLs, etc.). This is a best practice for maintainable and secure test automation.

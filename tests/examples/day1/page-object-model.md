@@ -184,4 +184,3 @@ test('login and add to cart', async ({ page }) => {
 
 - [Playwright Best Practices - Page Object Model](https://playwright.dev/docs/pom)
 - [Page Object Pattern - Martin Fowler](https://martinfowler.com/bliki/PageObject.html)
-

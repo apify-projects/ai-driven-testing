@@ -15,6 +15,13 @@ Use this document as your runbook when delivering the 1.5‑day workshop. Adapt 
 ## Day 1 – Prompting & MCP
 
 - [ ] Kickoff: Agenda, goals, show README "Getting started".
+- [ ] **Playwright Introduction** (for beginners):
+  - [ ] Present "What is Playwright?" slide - explain key features (cross-browser, auto-waiting, network interception, etc.).
+  - [ ] Show "Playwright Basics" slide - demonstrate test structure with example code.
+  - [ ] Explain key concepts: `test()`, `page`, `expect()`, `locator`.
+  - [ ] Show common actions: `page.goto()`, `page.click()`, `page.fill()`, `page.getByRole()`.
+  - [ ] Present "Playwright Selectors" slide - emphasize accessible selectors best practices.
+  - [ ] Explain why accessible selectors (`getByRole`, `getByPlaceholder`, `getByTestId`) are preferred over brittle CSS selectors.
 - [ ] **Official MCP Server Setup**: Guide attendees through basic MCP server installation (without custom config):
   - [ ] **For Cursor users**: Follow [official documentation](https://github.com/microsoft/playwright-mcp?tab=readme-ov-file#configuration-file) to add Playwright MCP server. Show how to configure it in Cursor settings.
   - [ ] **For VS Code users**: Install MCP extension if needed, follow [official documentation](https://github.com/microsoft/playwright-mcp?tab=readme-ov-file#configuration-file) to add Playwright MCP server. Show how to configure it in VS Code settings.
@@ -57,6 +64,15 @@ Use this document as your runbook when delivering the 1.5‑day workshop. Adapt 
   - [ ] Compare `login.spec.ts` (direct locators) with `login-pom.spec.ts` (POM pattern).
   - [ ] Run `npx playwright test tests/examples/day1/login-pom.spec.ts --project=chromium`.
   - [ ] Discuss when to use POM vs. direct locators.
+- [ ] **Environment Variables with dotenv**:
+  - [ ] Present "Environment Variables with dotenv" slide - explain why to use env variables (security, flexibility).
+  - [ ] Show dotenv configuration in `playwright.config.ts` (already configured).
+  - [ ] Demonstrate creating `.env` file with credentials (`USER_NAME=standard_user`, `PASSWORD=secret_sauce`).
+  - [ ] Show `.gitignore` entry for `.env` file (explain why it's important).
+  - [ ] Update test to use `process.env.USER_NAME` and `process.env.PASSWORD` instead of hardcoded values.
+  - [ ] Reference `prompts.md` Section 8 for detailed instructions.
+  - [ ] Run test to verify it works with environment variables.
+  - [ ] Discuss benefits: credentials not in code, different values per environment, secure handling.
 
 - [ ] Hands-on block: Assign `tests/exercises/day1/exercises.md`, circulate for questions.
 - [ ] CI/CD walkthrough:
@@ -93,4 +109,3 @@ Use this document as your runbook when delivering the 1.5‑day workshop. Adapt 
 
 - [ ] Collect feedback (retro board or shared doc).
 - [ ] Share slide export + repo link (and walkthrough branch instructions).
-
