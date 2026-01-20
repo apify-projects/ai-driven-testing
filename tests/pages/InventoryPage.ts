@@ -17,10 +17,10 @@ export class InventoryPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.pageTitle = page.locator('.title');
+    this.pageTitle = page.getByTestId('title');
     this.burgerMenuButton = page.locator('#react-burger-menu-btn');
     this.productItems = page.locator('.inventory_item');
-    this.shoppingCartBadge = page.locator('.shopping_cart_badge');
+    this.shoppingCartBadge = page.getByTestId('shopping_cart_badge');
     this.shoppingCartLink = page.locator('.shopping_cart_link');
   }
 
@@ -97,6 +97,7 @@ export class InventoryPage extends BasePage {
    */
   async addProductToCart(index: number): Promise<void> {
     const product = this.productItems.nth(index);
+    console.log(product);
     const addToCartButton = product.locator('button').filter({ hasText: 'Add to cart' });
     await addToCartButton.click();
   }
@@ -106,7 +107,7 @@ export class InventoryPage extends BasePage {
    */
   async getProductName(index: number): Promise<string> {
     const product = this.productItems.nth(index);
-    const productName = product.locator('.inventory_item_name');
+    const productName = product.getByTestId('inventory_item_name');
     const name = await productName.textContent();
     return name ? name.trim() : '';
   }

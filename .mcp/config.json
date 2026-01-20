@@ -8,6 +8,10 @@
     "isolated": true
   },
   "saveSession": true,
-  "saveTrace": true
+  "saveTrace": true,
+  "saveVideo": {
+    "width": 800,
+    "height": 600
+  }
 }
 
