@@ -32,33 +32,33 @@ export default defineConfig({
       testMatch: /.examples\/day2\/tests\/.*\.ts/,
       use: {
         ...devices['Desktop Chrome'],
-        // storageState: '.auth/user.json',
+        storageState: '.auth/user.json',
       },
-      // dependencies: ['setup'],
+      dependencies: ['setup'],
     },
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        // storageState: '.auth/user.json',
+        storageState: '.auth/user.json',
       },
-      // dependencies: ['setup'],
+      dependencies: ['setup'],
     },
     {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
-        //  storageState: '.auth/user.json'
+         storageState: '.auth/user.json'
         },
-      // dependencies: ['setup'],
+      dependencies: ['setup'],
     },
     {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
-        // storageState: '.auth/user.json'
+        storageState: '.auth/user.json'
        },
-      // dependencies: ['setup'],
+      dependencies: ['setup'],
     },
   ],
   outputDir: 'test-results',

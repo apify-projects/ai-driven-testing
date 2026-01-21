@@ -9,7 +9,7 @@ setup('authenticate standard_user', async ({ page }) => {
   // Navigate and authenticate using LoginPage POM
   const loginPage = new LoginPage(page);
   await loginPage.goto();
-  await loginPage.login('standard_user', 'secret_sauce');
+  await loginPage.login(process.env.USER_NAME ?? '', process.env.PASSWORD ?? '');
 
   // Wait for inventory page to confirm successful login
   await page.waitForURL('**/inventory.html');
