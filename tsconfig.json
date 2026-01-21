@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "outDir": "dist"
   },
-  "include": ["tests/examples", "scripts", "playwright.config.ts"]
+  "include": ["tests/examples", "scripts", "playwright.config.ts", "tests/seed.spec.ts"]
 }
 
 

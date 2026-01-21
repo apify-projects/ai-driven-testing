@@ -9,6 +9,14 @@
         ".mcp/config.json"
       ],
       "type": "stdio"
+    },
+    "playwright-test": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "run-test-mcp-server"
+      ]
     }
   }
 }
