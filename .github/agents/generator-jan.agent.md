@@ -28,7 +28,9 @@ application behavior.
   - Includes a comment with the step text before each step execution. Do not duplicate comments if step requires
     multiple actions.
   - Always use best practices from the log when generating tests.
-  - Import and use Page Object Model classes from `tests/pages/` (BasePage, LoginPage, InventoryPage, CartPage, CheckoutPage)
+  - Import and use Page Object Model classes from `tests/pages/` (BasePage, LoginPage, InventoryPage, CartPage, CheckoutPage) - for Souce Demo application
+  - Create new POM classes if does not exist yet and use them in tests
+  - For any other applications, create and use appropriate POM classes following the established pattern.
   - Add POM reference in file header comment: `// pom: tests/pages/ClassName.ts`
 
 ## Available Page Object Model Classes

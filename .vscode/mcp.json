@@ -1,15 +1,6 @@
 {
   "inputs": [],
   "servers": {
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "@playwright/mcp@latest",
-        "--config",
-        ".mcp/config.json"
-      ],
-      "type": "stdio"
-    },
     "playwright-test": {
       "type": "stdio",
       "command": "npx",

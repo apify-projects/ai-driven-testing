@@ -37,6 +37,13 @@ export default defineConfig({
       dependencies: ['setup'],
     },
     {
+      name: 'new-app',
+      testMatch: /.exercises\/day2\/.*\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+    },
+    {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
