@@ -28,22 +28,6 @@ export default defineConfig({
       testMatch: /.*\.seed\.ts/,
     },
     {
-      name: 'logged-in-chromium',
-      testMatch: /.examples\/day2\/tests\/.*\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: '.auth/user.json',
-      },
-      dependencies: ['setup'],
-    },
-    {
-      name: 'new-app',
-      testMatch: /.exercises\/day2\/.*\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-      },
-    },
-    {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
@@ -52,20 +36,11 @@ export default defineConfig({
       dependencies: ['setup'],
     },
     {
-      name: 'firefox',
+      name: 'exercises',
+      testMatch: /tests\/exercises\/.*\.ts/,
       use: {
-        ...devices['Desktop Firefox'],
-         storageState: '.auth/user.json'
-        },
-      dependencies: ['setup'],
-    },
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        storageState: '.auth/user.json'
-       },
-      dependencies: ['setup'],
+        ...devices['Desktop Chrome'],
+      },
     },
   ],
   outputDir: 'test-results',

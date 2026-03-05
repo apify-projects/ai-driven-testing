@@ -1,7 +1,7 @@
 {
   "name": "ai-driven-testing",
   "version": "1.0.0",
-  "description": "Hands-on AI-driven end-to-end testing workshop with Playwright, MCP tooling, Playwright Test Agents, and CI/CD examples.",
+  "description": "Hands-on AI-driven end-to-end testing session with Playwright, MCP tooling, Playwright Test Agents examples.",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -11,9 +11,8 @@
     "test:ui": "playwright test --ui",
     "test:report": "playwright show-report",
     "mcp:demo": "tsx scripts/mcp-login-demo.ts",
-    "mcp:cart": "tsx tests/exercises/day1/mcp-cart.ts",
-    "slides:dev": "marp --preview slides/ai-testing.md",
-    "slides:build": "marp slides/ai-testing.md --html --output slides/dist/ai-testing.html",
+    "slides:dev": "marp --preview slides/playwright-agents.md",
+    "slides:build": "marp slides/playwright-agents.md --html --output slides/dist/playwright-agents.html",
     "docker:build": "docker build -f Dockerfile -t ai-testing .",
     "docker:test": "docker run --rm --ipc=host --shm-size=1g ai-testing"
   },
@@ -21,11 +20,15 @@
     "playwright",
     "testing",
     "ai",
-    "workshop",
+    "agents",
     "mcp"
   ],
   "author": "Martin Krištof",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apify-projects/ai-driven-testing.git"
+  },
   "engines": {
     "node": ">=20"
   },
