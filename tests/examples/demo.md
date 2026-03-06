@@ -6,8 +6,8 @@ Target user: `standard_user` / `secret_sauce`
 
 ### Step 1 – Planner
 
-```
-using playwright planner - create a test plan for standard_user, save to spec/plan.md
+```text
+using playwright-test-planner - create a test plan for standard_user, save to spec/plan.md
 ```
 
 Agent explores the app and writes a structured test plan to `spec/plan.md`.
@@ -16,32 +16,20 @@ Agent explores the app and writes a structured test plan to `spec/plan.md`.
 
 ### Step 2 – Generator
 
-```
-using playwright generator - generate tests from spec/plan.md
+```text
+using playwright-test-generator - generate tests from spec/plan.md to tests/examples/ for section 1.1
 ```
 
 Agent executes each step live in the browser and writes tests to `tests/examples/`.
-Tests run under the `chromium` project (pre-authenticated as `standard_user`).
 
 ### Step 3 – Run
 
 ```bash
-npm test
+npm test -- --project=examples
 ```
 
 ---
 
-## Hands-on exercise
+## Hands-on exercises
 
 See `tests/exercises/exercises.md`.
-
-Participants pick one of the remaining users and run the full pipeline themselves:
-
-| User | Behavior |
-|------|----------|
-| `problem_user` | Broken UI – images, dropdowns, sorting |
-| `performance_glitch_user` | Slow page loads |
-| `visual_user` | Visual regressions |
-
-Agent generates a **complete test including login** for the chosen user.
-Tests run under the `exercises` project (no pre-auth).

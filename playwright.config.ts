@@ -28,7 +28,7 @@ export default defineConfig({
       testMatch: /.*\.seed\.ts/,
     },
     {
-      name: 'chromium',
+      name: 'logged user',
       use: {
         ...devices['Desktop Chrome'],
         storageState: '.auth/user.json',
@@ -38,6 +38,13 @@ export default defineConfig({
     {
       name: 'exercises',
       testMatch: /tests\/exercises\/.*\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+    },
+    {
+      name: 'examples',
+      testMatch: /tests\/examples\/.*\.ts/,
       use: {
         ...devices['Desktop Chrome'],
       },

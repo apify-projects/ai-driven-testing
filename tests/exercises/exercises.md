@@ -1,54 +1,88 @@
-# Hands-on Exercise – Playwright Agents (~25 min)
+# Hands-on Exercises – Playwright Agents (~25 min)
 
-Choose a SauceDemo user and run the full Planner → Generator → Healer pipeline.
+---
 
-## Steps
+## Exercise 1 – Full pipeline for a different user
 
-### 1. Planner – create a test plan
+Choose a user and run the full Planner → Generator → Healer pipeline.
+The generated tests include their own login step (no seed needed).
 
-Pick a user:
-- `problem_user` – broken UI (images, dropdowns)
-- `performance_glitch_user` – slow page loads
-- `visual_user` – visual regressions
+| User | Behavior |
+|------|----------|
+| `problem_user` | Broken UI – images, dropdowns, sorting |
+| `performance_glitch_user` | Slow page loads |
+| `visual_user` | Visual regressions |
+
+### Step 1 – Planner
 
 ```
-using playwright planner - create a test plan for <chosen_user>,
+using playwright-test-planner - create a test plan for <chosen_user>,
 save to spec/<chosen_user>-plan.md
 ```
 
-### 2. Generator – generate tests
+### Step 2 – Generator
 
 ```
-using playwright generator - generate tests from spec/<chosen_user>-plan.md
+using playwright-test-generator - generate tests from spec/<chosen_user>-plan.md,
+save to tests/exercises/
 ```
 
-Tests will be written to `tests/exercises/agents/`.
-
-### 3. Run the tests
+### Step 3 – Run
 
 ```bash
-npm test
+npm test -- --project=exercises
 ```
 
-See what passes and what fails.
-
-### 4. Healer – fix failing tests
+### Step 4 – Healer
 
 ```
-using playwright healer - fix failing tests
+using playwright-test-healer - fix failing tests
 ```
+
+---
+
+## Exercise 2 – Seed authentication + POM
+
+Use the enhanced agents (`test-planner-seed` + `test-generator-pom`) to generate a test for `standard_user`.
+
+`standard_user` is pre-authenticated via `tests/seed.spec.ts` – the test starts directly on the inventory page, no login step needed. The generator will use existing POM classes from `tests/pages/`.
+
+### Step 1 – Planner (seed-aware)
+
+```text
+using test-planner-seed - create a test plan for standard_user,
+save to spec/plan-pom.md
+```
+
+### Step 2 – Generator (POM)
+
+```text
+using test-generator-pom - generate a test from spec/plan-pom.md
+for section 3.1 only, save to tests/exercises/
+```
+
+### Step 3 – Run
+
+```bash
+npm test -- --project=exercises
+```
+
+---
 
 ## Bonus
 
-**Break a working test** – change a locator or assertion to something wrong, run tests, then:
+**Break a working test** – change a locator or assertion, run tests, then:
 
-```
-using playwright healer - fix failing tests
+```text
+using playwright-test-healer - fix failing tests
 ```
 
 Watch the Healer inspect the DOM and patch the test back to green.
 
+---
+
 ## Reference
 
 - Example agent-generated tests: `tests/exercises/agents/`
-- SauceDemo accounts: `standard_user`, `locked_out_user`, `problem_user`, `performance_glitch_user`, `visual_user` (password: `secret_sauce`)
+- Test plan: `spec/plan.md`
+- SauceDemo accounts (password: `secret_sauce`): `standard_user`, `problem_user`, `performance_glitch_user`, `visual_user`

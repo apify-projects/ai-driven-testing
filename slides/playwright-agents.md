@@ -227,13 +227,13 @@ User: `standard_user` · baseURL configured in `playwright.config.ts`
 
 **Step 1 – Planner**
 ```
-using playwright planner - create a test plan for standard_user,
+using playwright-test-planner - create a test plan for standard_user,
 save to spec/plan.md
 ```
 
 **Step 2 – Generator**
 ```
-using playwright generator - generate tests from spec/plan.md
+using playwright-test-generator - generate tests from spec/plan.md to tests/examples/ for section 1.1
 ```
 
 ---
@@ -249,27 +249,29 @@ npm test
 **Step 4 – Heal if needed**
 
 ```
-using playwright healer - fix failing tests
+using playwright-test-healer - fix failing tests
 ```
 
 ---
 
-## 🧑‍💻 Hands-on Exercise (~25 min)
+## 🧑‍💻 Hands-on Exercises (~25 min)
 
-Pick one user and run the full pipeline:
+**Exercise 1** – Pick a user (`problem_user`, `performance_glitch_user`, `visual_user`) and run full pipeline:
+1. `playwright-test-planner` → plan
+2. `playwright-test-generator` → tests in `tests/exercises/`
+3. `npm test -- --project=exercises`
+4. `playwright-test-healer` → fix failures
 
-| User | Behavior |
-|------|----------|
-| `problem_user` | Broken UI – images, dropdowns, sorting |
-| `performance_glitch_user` | Slow page loads |
-| `visual_user` | Visual regressions |
+---
 
-1. **Planner** → `spec/<user>-plan.md`
-2. **Generator** → `tests/exercises/agents/`
-3. **Run** → `npm test`
-4. **Healer** → fix failures
+## 🧑‍💻 Hands-on Exercises (~25 min)
 
-**Bonus:** Break a test, then use Healer to fix it.
+**Exercise 2** – standard_user + seed + POM:
+1. `test-planner-seed` → `spec/plan-pom.md`
+2. `test-generator-pom` → section 3.1 in `tests/exercises/`
+3. `npm test -- --project=exercises`
+
+See `tests/exercises/exercises.md` for full instructions.
 
 ---
 <!-- Scoped style -->
