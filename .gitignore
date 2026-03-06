@@ -7,4 +7,3 @@ test-results/
 artifacts/
 .env
 .auth/user.json
-spec/
