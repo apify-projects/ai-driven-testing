@@ -254,7 +254,7 @@ using playwright-test-healer - fix failing tests
 
 ---
 
-## 🧑‍💻 Hands-on Exercises (~25 min)
+## 🧑‍💻 Hands-on Exercises (~10 min)
 
 **Exercise 1** – Pick a user (`problem_user`, `performance_glitch_user`, `visual_user`) and run full pipeline:
 1. `playwright-test-planner` → plan
@@ -264,7 +264,42 @@ using playwright-test-healer - fix failing tests
 
 ---
 
-## 🧑‍💻 Hands-on Exercises (~25 min)
+## Page Object Model (POM)
+
+Pattern that wraps page interactions into reusable classes:
+
+```typescript
+// Without POM
+await page.getByPlaceholder('Username').fill('standard_user');
+await page.getByRole('button', { name: 'Login' }).click();
+
+// With POM
+const loginPage = new LoginPage(page);
+await loginPage.login('standard_user', 'secret_sauce');
+```
+
+**Benefits:** locators defined once · tests read like user stories · easy to maintain
+
+---
+
+## POM + Agents
+
+`test-generator-pom` uses existing classes from `tests/pages/`:
+
+- `LoginPage` · `InventoryPage` · `CartPage` · `CheckoutPage`
+- Skips login step for `standard_user` (seed handles auth)
+- Adds `// pom:` reference in each generated file
+
+```text
+using test-planner-seed   - create a test plan for standard_user,
+                            save to spec/plan-pom.md
+using test-generator-pom  - generate tests from spec/plan-pom.md
+                            for section 3.1, save to tests/exercises/
+```
+
+---
+
+## 🧑‍💻 Hands-on Exercises (~15 min)
 
 **Exercise 2** – standard_user + seed + POM:
 1. `test-planner-seed` → `spec/plan-pom.md`

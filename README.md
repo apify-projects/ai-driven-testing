@@ -83,12 +83,26 @@ All accounts use password `secret_sauce`.
 
 ## Playwright Agents
 
-Agents are defined in `.claude/agents/` and invoked via Claude Code chat:
+Agents are defined in `.claude/agents/` and invoked via Claude Code chat.
 
+### Standard agents
+
+```text
+using playwright-test-planner   - create a test plan for standard_user, save to spec/plan.md
+using playwright-test-generator - generate tests from spec/plan.md
+using playwright-test-healer    - fix failing tests
 ```
-using playwright planner  - create a test plan for standard_user, save to spec/plan.md
-using playwright generator - generate tests from spec/plan.md
-using playwright healer   - fix failing tests
+
+### Custom agents (enhanced)
+
+| Agent | Description |
+| --- | --- |
+| `test-planner-seed` | Planner that correctly annotates seed usage – adds `Seed:` only to sections that require a logged-in state |
+| `test-generator-pom` | Generator that uses existing POM classes from `tests/pages/` and skips login for `standard_user` |
+
+```text
+using test-planner-seed   - create a test plan for standard_user, save to spec/plan-pom.md
+using test-generator-pom  - generate tests from spec/plan-pom.md for section 3.1, save to tests/exercises/
 ```
 
 No URL needed – `baseURL` is set to `https://www.saucedemo.com/` in `playwright.config.ts`.
