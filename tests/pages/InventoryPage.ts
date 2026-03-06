@@ -107,7 +107,7 @@ export class InventoryPage extends BasePage {
    */
   async getProductName(index: number): Promise<string> {
     const product = this.productItems.nth(index);
-    const productName = product.getByTestId('inventory_item_name');
+    const productName = product.getByTestId('inventory-item-name');
     const name = await productName.textContent();
     return name ? name.trim() : '';
   }
